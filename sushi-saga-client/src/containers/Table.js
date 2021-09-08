@@ -9,7 +9,7 @@ const Table = (props) => {
 
   return (
     <Fragment>
-      <h1 className="remaining">You have: ${100} remaining!</h1>
+      <h1 className="remaining">You have: ${props.money} remaining!</h1>
       <div className="table">
         <div className="stack">
           {
@@ -18,7 +18,7 @@ const Table = (props) => {
                and renders an empty plate
                for every element in the array
             */
-            renderPlates([])
+            renderPlates(props.plates)
           }
         </div>
       </div>

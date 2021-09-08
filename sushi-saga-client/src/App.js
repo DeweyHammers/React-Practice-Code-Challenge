@@ -7,20 +7,40 @@ const API = "http://localhost:3000/sushis";
 
 class App extends Component {
   state = {
-    sushi: [],
+    sushis: [],
+    money: 100,
+    plates: [],
   };
 
   componentDidMount() {
-    fetch("http://localhost:3000/sushis")
+    fetch(API)
       .then((res) => res.json())
-      .then((json) => this.setState({ sushi: json }));
+      .then((json) => {
+        json.map((sushi) => {
+          this.setState({
+            sushis: [...this.state.sushis, { ...sushi, eaten: false }],
+          });
+        });
+      });
   }
+
+  handleBuySushi = (sushi) => {
+    if (sushi.price <= this.state.money) {
+      this.setState({ money: (this.state.money -= sushi.price) });
+      this.setState({ plates: [...this.state.plates, 1] });
+      sushi.eaten = true;
+    }
+  };
 
   render() {
     return (
       <div className="app">
-        <SushiContainer sushi={this.state.sushi} />
-        <Table />
+        <SushiContainer
+          handleBuySushi={this.handleBuySushi}
+          sushis={this.state.sushis}
+          canEat={this.state.canEat}
+        />
+        <Table plates={this.state.plates} money={this.state.money} />
       </div>
     );
   }
